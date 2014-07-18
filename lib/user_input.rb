@@ -4,7 +4,7 @@ class UserInput
 
 	def initialize
 			@directions = ["h","v"]
-			@numbers = %w[1 2 3 4 5 6 7 8 9 0]
+			@numbers = %w[1 2 3 4 5 6 7 8 9 10]
 			@letters = %w[A B C D E F G H I J]
 			@messages = {
 				ship_hit: "Direct hit, el capitan!",
@@ -47,10 +47,12 @@ class UserInput
 	end
 
 	def get_coordinate
-		puts "Please enter a coordinate (eg A1-J0)"
+		puts "Please enter a coordinate (eg A1-J10)"
 		input = gets.chomp.chars
 		if input.count == 2
 			x, y = input[0], input[1]
+		elsif input.count == 3 && input[1] == '1' && input[2] == '0'
+			x, y = input[0], '10'
 		else
 			x, y = "X", "X"
 		end
@@ -73,7 +75,9 @@ class UserInput
 			puts "That is not a valid square, please try again"
 			input = gets.chomp.chars
 			if input.count == 2
-				x, y = input[0], input[1]
+			x, y = input[0], input[1]
+			elsif input.count == 3 && input[1] == '1' && input[2] == '0'
+			x, y = input[0], '10'
 			else
 				x, y = "X", "X"
 			end
