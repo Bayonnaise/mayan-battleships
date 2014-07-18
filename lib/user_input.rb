@@ -47,42 +47,37 @@ class UserInput
 	end
 
 	def get_coordinate
-		puts "Please enter a coordinate (eg A1-J10)"
-		input = gets.chomp.chars
-		if input.count == 2
-			x, y = input[0], input[1]
-		elsif input.count == 3 && input[1] == '1' && input[2] == '0'
-			x, y = input[0], '10'
-		else
-			x, y = "X", "X"
-		end
-		x, y = validate_coordinates(x.upcase, y)
+		x = "X"
+		y = "Y"
+		msg = "Please enter a coordinate (eg A1-J10)"
+		x, y = validate_coordinate(x, y, msg)
 		convert(x, y)
 	end
 
 	### VALIDATING AND CONVERTING INPUT ###
 	
+	def validate_coordinate(x, y, msg)
+		while !numbers.include?(y) || !letters.include?(x.upcase)
+			puts msg
+			input = gets.chomp.chars
+			if input.count == 2
+				x, y = input[0], input[1]
+			elsif input.count == 3 && input[1] == '1' && input[2] == '0'
+				x, y = input[0], '10'
+			else
+				x, y = "X", "X"
+			end
+			msg = "That's not a valid coordinate, try again... (eg A1-J10)"
+		end
+		return x, y
+	end
+
 	def check_direction(direction)
 		while !directions.include?(direction.downcase)
 			puts "That direction is not valid, please try again"
 			direction = gets.chomp
 		end
 		direction
-	end
-
-	def validate_coordinates(x, y)
-		while !numbers.include?(y) || !letters.include?(x)
-			puts "That is not a valid square, please try again"
-			input = gets.chomp.chars
-			if input.count == 2
-			x, y = input[0], input[1]
-			elsif input.count == 3 && input[1] == '1' && input[2] == '0'
-			x, y = input[0], '10'
-			else
-				x, y = "X", "X"
-			end
-		end
-		return x, y
 	end
 
 	def convert(x, y)
