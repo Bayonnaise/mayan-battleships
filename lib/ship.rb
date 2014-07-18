@@ -1,12 +1,15 @@
+require_relative 'user_input'
+
 class Ship
 
 	DEFAULT_LENGTH = 3
-	attr_reader :length, :hit_count, :name
+	attr_reader :length, :hit_count, :name, :interface
 
 	def initialize(length: DEFAULT_LENGTH, name: "ship")	
 		@length = length
 		@hit_count = 0
 		@name = name
+		@interface = UserInput.new
 	end
 
 	def self.raft
@@ -26,7 +29,7 @@ class Ship
 	end
 
 	def add_hit
-		puts "A hit!"
+		interface.message(:ship_hit)
 		@hit_count += 1
 		if sunk? 
 			report_sunk
@@ -38,7 +41,7 @@ class Ship
 	end
 
 	def report_sunk
-		puts "#{self.name} has been sunk"
+		interface.message(:ship_sunk)
 	end
 
 end

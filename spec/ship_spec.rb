@@ -42,7 +42,8 @@ describe Ship do
 
 		it 'reports if it has been sunk' do
 			canoe = Ship.canoe
-			expect(STDOUT).to receive(:puts).with("canoe has been sunk")
+			allow(STDOUT).to receive(:puts).with("Direct hit, el capitan!")
+			expect(STDOUT).to receive(:puts).with("You sunk your opponent's ship!")
 			3.times {canoe.add_hit}
 		end
 

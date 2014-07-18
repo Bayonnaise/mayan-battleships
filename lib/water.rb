@@ -1,5 +1,13 @@
+require_relative 'user_input'
+
 class Water
+	def initialize
+		@interface = UserInput.new
+	end
+
+	attr_reader :interface
+
 	def add_hit
-			puts "Your arrows sleep with the fishes"
+		interface.message(:water_hit)
 	end
 end

@@ -23,17 +23,6 @@ class Square
 			@contents.add_hit
 		end
 	end
-
-	# def report_hit
-	# 	if contents.nil?
-	# 		puts "Target missed. Bad luck!"
-	# 	else
-	# 		puts "BOOM! Target down"
-	# 		@contents.add_hit 
-	# 	end
-	# end
-
-
 end
 
 	

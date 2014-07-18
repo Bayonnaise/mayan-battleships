@@ -3,35 +3,63 @@ class UserInput
 	GRID_RANGE = (0..9)
 
 	def initialize
-			@directions = ["horizontal","vertical"]
+			@directions = ["h","v"]
 			@numbers = %w[1 2 3 4 5 6 7 8 9 0]
+			@letters = %w[A B C D E F G H I J]
+			@messages = {
+				ship_hit: "Direct hit, el capitan!",
+				water_hit: "Splash! Better luck next time...",
+				duplicate_ship: "You can't put it there, try again...",
+				ship_sunk: "You sunk your opponent's ship!"
+			}
 	end
 
-	attr_reader :directions, :numbers
+	attr_reader :directions, :numbers, :messages, :letters
+
+	def message(action)
+		puts messages[action]
+	end
+
+	### GETTING INPUT ###
 
 	def get_name_of_player
 		puts "Please enter your name"
 		gets.chomp
 	end
 
-	def get_number_for_strike(axis)
-		puts "Please enter your target #{axis}"
-		target = gets.chomp
-		check_number(target)
+	def get_input_to_place(ship)
+		puts "Place your #{ship.name} (#{ship.length})..."
+		x, y = get_coordinate
+		direction = get_direction
+		return x, y, direction
 	end
 
-	def get_number(axis, ship)
-		puts "To place your #{ship.name}(#{ship.length}), please enter a #{axis} between 0 and 9"
-		number = gets.chomp
-		check_number(number)
+	def get_input_for_attack
+		puts "Ready to attack..."
+		x, y = get_coordinate
+		return x, y
 	end
 
-	def get_direction(ship)
-		puts "To place your #{ship.name}(#{ship.length}), please select a direction (horizontal or vertical)"
+	def get_direction
+		puts "Please enter a direction (h/v)"
 		direction = gets.chomp
 		check_direction(direction)
 	end
 
+	def get_coordinate
+		puts "Please enter a coordinate (eg A1-J0)"
+		input = gets.chomp.chars
+		if input.count == 2
+			x, y = input[0], input[1]
+		else
+			x, y = "X", "X"
+		end
+		x, y = validate_coordinates(x.upcase, y)
+		convert(x, y)
+	end
+
+	### VALIDATING AND CONVERTING INPUT ###
+	
 	def check_direction(direction)
 		while !directions.include?(direction.downcase)
 			puts "That direction is not valid, please try again"
@@ -40,31 +68,26 @@ class UserInput
 		direction
 	end
 
-	def check_number(number)
-		while !numbers.include?(number)
-			puts "That number is not valid, please try again"
-			number = gets.chomp
+	def validate_coordinates(x, y)
+		while !numbers.include?(y) || !letters.include?(x)
+			puts "That is not a valid square, please try again"
+			input = gets.chomp.chars
+			if input.count == 2
+				x, y = input[0], input[1]
+			else
+				x, y = "X", "X"
+			end
 		end
-		number
+		return x, y
 	end
 
-	def get_all_input(ship)
-		row = get_number("row", ship)
-		column = get_number("column", ship)
-		direction = get_direction(ship)
-		return row, column, direction
+	def convert(x, y)
+		row = letters.index(x.upcase)
+		column = numbers.index(y)
+		return row, column
 	end
 
-
-	def get_coordinate
-		puts "Please enter a coordinate"
-		coordinate = gets.chomp
-		# coordinate.convert
-	end
-
-	def convert
-
-	end
+	### PRINTING THE GRID ###
 
 	def print_header
 		puts " | 1 2 3 4 5 6 7 8 9 10"
