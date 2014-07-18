@@ -5,8 +5,8 @@ describe OwnView do
 	before(:each) {player.board= Board.new}
 	let(:terminal_board) {TerminalBoard.new(player.board)}
 	before(:each) {player.ships= [Ship.canoe,Ship.longboat]}
-	before(:each) {player.board.place(player.ships[0], at: {x:0,y:0}, facing: :horizontal)}
-	before(:each) {player.board.place(player.ships[1], at: {x:2,y:0}, facing: :vertical)}
+	before(:each) {player.board.place(player.ships[0], at: {x:0,y:0}, facing: :h)}
+	before(:each) {player.board.place(player.ships[1], at: {x:2,y:0}, facing: :v)}
 
 	let(:own_terminal_board) {OwnView.new(terminal_board)}
 	
@@ -17,7 +17,7 @@ describe OwnView do
 
 		it 'Assigns an X for a ship which has been hit' do
 			own_terminal_board.read
-			expect(own_terminal_board.display_grids[0][0]).to eq "X"
+			expect(own_terminal_board.display_grid[0][0]).to eq "X"
 		end
 
 		it 'Assigns a O for water which has been hit' do
@@ -29,11 +29,6 @@ describe OwnView do
 			own_terminal_board.read
 			expect(own_terminal_board.display_grid[0][1]).to eq "+"
 		end
-
-		# it 'can print a board' do
-		# 	own_terminal_board.read
-		# 	own_terminal_board.print
-		# end
 
 	end
 

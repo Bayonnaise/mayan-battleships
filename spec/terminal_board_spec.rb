@@ -6,8 +6,8 @@ describe TerminalBoard do
 	before(:each) {player.board= Board.new}
 	let(:terminal_board) {TerminalBoard.new(player.board)}
 	before(:each) {player.ships= [Ship.canoe,Ship.longboat]}
-	before(:each) {player.board.place(player.ships[0], at: {x:0,y:0}, facing: :horizontal)}
-	before(:each) {player.board.place(player.ships[1], at: {x:2,y:0}, facing: :vertical)}
+	before(:each) {player.board.place(player.ships[0], at: {x:0,y:0}, facing: :h)}
+	before(:each) {player.board.place(player.ships[1], at: {x:2,y:0}, facing: :v)}
 
 	it 'Has a board' do
 		expect(terminal_board.display_grid).to eq Array.new(10,Array.new(10, " "))
