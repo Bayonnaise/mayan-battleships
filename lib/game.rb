@@ -8,15 +8,23 @@ require_relative 'game'
 require_relative 'terminal_board'
 require_relative 'own_terminal_board'
 
+NUMBER_OF_PLAYERS = 2
+NUMBER_OF_RAFTS = 1
+NUMBER_OF_CANOES = 1
+NUMBER_OF_SHORTBOATS = 1
+NUMBER_OF_LONGBOATS = 1
+
 class Game
 	
 	def initialize
 		@players = []
 		@interface = UserInput.new
-		play_game
+		# play_game
 	end
 
 	attr_reader :players, :interface
+
+# Phase	 0
 
 	def play_game
 		create_game_elements
@@ -24,7 +32,7 @@ class Game
 		play_battleships
 	end
 
-	### Creating everything necessary for Battelships ###
+# Phase 1 - create game elements
 
 	def create_game_elements
 		create_players
@@ -34,7 +42,7 @@ class Game
 	end
 
 	def create_players
-		2.times do
+		NUMBER_OF_PLAYERS.times do
 			name = interface.get_name_of_player
 			@players << Player.new(name: name)
 		end
@@ -55,13 +63,17 @@ class Game
 
  	def create_ships
  		players.each do |player|
- 			player.ships = create_fleet
+ 			create_fleet_for(player)
  		end
 	end
 	
-	def create_fleet
-		[Ship.raft, Ship.canoe]#, Ship.shortboat, Ship.longboat]
+	def create_fleet_for(player)
+		NUMBER_OF_RAFTS.times 		{player.ships << Ship.raft} 
+		NUMBER_OF_CANOES.times 		{player.ships << Ship.canoe}
+		NUMBER_OF_SHORTBOATS.times 	{player.ships << Ship.shortboat}
+		NUMBER_OF_LONGBOATS.times 	{player.ships << Ship.longboat}	
 	end
+
 
 	### Placing the ships ready for play ###
 
@@ -84,8 +96,6 @@ class Game
 			player.board.place(ship, at: coordinate, facing: direction.to_sym)
 		end
 	end
-
-	### Playing the game ###
 
 	def play_battleships
 		turn = 0
@@ -112,8 +122,8 @@ class Game
 
 	def fire_shot(target, row, column)
 		target.board.grid[row.to_i][column.to_i].hit!
-
 	end
+
 
 end
 

@@ -5,6 +5,7 @@ class Player
 
 	def initialize(name: "")
 		@name = name
+		@ships = []
 	end
 
 	attr_accessor :name, :board, :ships, :terminal_board, :own_terminal_board

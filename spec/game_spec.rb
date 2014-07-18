@@ -2,77 +2,84 @@ require 'game'
 
 describe Game do
 
-	let (:game) {Game.new}
+	let (:game) 	{ Game.new							}	
+	before(:each) 	{ allow(STDOUT).to receive(:puts) 	}
+	before(:each)   { allow(game.interface).to receive(:gets).and_return("Thomas", "Charlotte")}
 	
-	xit 'initializes with two players' do
-		expect(game.players.count).to eq 2
+	it 'creates two players' do
+		game.create_players
+		expect(game.players.count).to eq Game::NUMBER_OF_PLAYERS
 	end
 
-	xit 'has only players' do
+	it 'requires a name for each player' do
+		game.create_players
+		expect(game.players[0].name).to eq "Thomas"
+	end
+
+	it 'has only players' do
 		game.players.each do |player|
 			player.is_a?(Player)
 		end
 	end
 
-	xit 'initializes a fleet for each player' do
+	context 'when creating a fleet' do
+		before(:each) {game.create_players		}
+		before(:each) {game.create_ships		}
+		let(:player)  {game.players[0]			}
 
-	end
 
-	xspecify 'when it is created have 1 raft' do
-		ships = player.ships.select do |ship|
-			ship.length == 2
+
+		it 'gives each player the correct number of rafts' do
+			ships = player.ships.select do |ship|
+				ship.length == 2
+			end
+
+			expect(ships.count).to eq Game::NUMBER_OF_RAFTS
 		end
 
-		expect(ships.count).to eq 1
-	end
+		it 'gives each player the correct number of canoes' do
+			ships = player.ships.select do |ship|
+				ship.length == 3
+			end
 
-	xspecify 'when it is created have 1 canoe' do
-		ships = player.ships.select do |ship|
-			ship.length == 3
-		end
-		expect(ships.count).to eq 1
-	end
-
-	xspecify 'when it is created have 1 shortboat' do
-		ships = player.ships.select do |ship|
-			ship.length == 4
+			expect(ships.count).to eq Game::NUMBER_OF_CANOES
 		end
 
-		expect(ships.count).to eq 1
-	end
+		it 'gives each player the correct number of shortboats' do
+			ships = player.ships.select do |ship|
+				ship.length == 4
+			end
 
-	xspecify 'when it is created have 1 longboat' do
-		ships = player.ships.select do |ship|
-			ship.length == 6
+			expect(ships.count).to eq Game::NUMBER_OF_SHORTBOATS
 		end
 
-		expect(ships.count).to eq 1
-	end
+		it 'gives each player the correct number of longboats' do
+			ships = player.ships.select do |ship|
+				ship.length == 6
+			end
 
-	xit 'contains only ships' do
-		not_ships = player.ships.reject do |ship|
-			ship.is_a?(Ship)
+			expect(ships.count).to eq Game::NUMBER_OF_LONGBOATS
 		end
-		expect(not_ships).to eq []
-	end
 
-	xit 'has no ships of invalid length' do
-		player.ships.each do |ship|
-			expect(ship.length).to be <= 6
-			expect(ship.length).to be >= 2
+		it 'contains only ships' do
+			not_ships = player.ships.reject do |ship|
+				ship.is_a?(Ship)
+			end
+			expect(not_ships).to eq []
 		end
+
 	end
 
-	xit 'has a board' do
-		expect(player.board).to be_instance_of(Board)
-	end
+	context 'when in set-up phase' do
 
-	xit 'will place every ship in the fleet' do
-		allow(player).to receive(:ask_for_input).and_return([0,0])
-		player.ships.each do |ship|
-			expect(player.board).to receive(:place).with(ship,0,0)
+		it 'asks each player in turn to place their ships' do
+			# Do we need to test this?
 		end
-		player.place_ships
+
 	end
 
+context 'when playing the game' do
+
+
+	end
 end
