@@ -79,7 +79,7 @@ class Game
 
 	def set_up_game
 			players.each do |player|
-			players.place_ships
+			player.place_all_ships
 		end
 		puts "Let's play Battleships!"
 	end
@@ -93,27 +93,19 @@ class Game
 		until players[0].has_lost? || players[1].has_lost?
 			puts "Turn #{turn}"
 			interface.print(players[1].terminal_board.read)
-			row, column = get_target(players[0])
+			row, column = players[0].get_target
 			target = players[1]
-			fire_shot(target, row, column)
+			players[0].fire_shot(target, row, column)
 			interface.print(players[0].terminal_board.read)
-			row, column = get_target(players[1])
+			row, column = players[1].get_target
 			target = players[0]
-			fire_shot(target, row, column)
+			players[1].fire_shot(target, row, column)
 			turn += 1
 		end
 		puts "Game over"
 	end
 
-	def get_target(player)
-		puts "It's your turn, #{player.name}"
-		row, column = interface.get_input_for_attack
-		return row, column
-	end
 
-	def fire_shot(target, row, column)
-		target.board.grid[row.to_i][column.to_i].hit!
-	end
 
 
 end

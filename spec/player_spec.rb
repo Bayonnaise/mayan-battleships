@@ -22,5 +22,14 @@ describe Player do
 		expect(player).to have_lost
 	end
 
+	context 'when placing ships' do
+
+		it '' do
+			
+		end
+
+	end
+
+
 end
 
