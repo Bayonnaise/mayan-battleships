@@ -20,19 +20,18 @@ class Player
 		ships.each do |ship| 
 			coordinate, direction = get_desired_location_of ship
 			# interface.print(own_terminal_board.read)
-			
-			board.place(ship, at: coordinate, facing: direction.to_sym)
+			board.place(ship, at: coordinate, facing: direction)
 		end
 	end
 
 
 	def get_desired_location_of ship
 		begin
-			row, column, direction = interface.get_input_to_place(ship)
-			coordinate = {x: row.to_i, y: column.to_i}
-		end while !board.check_valid?(ship, at: coordinate, facing: direction.to_sym)
+			coordinate, direction = interface.get_input_to_place(ship)
+			# coordinate = {x: row.to_i, y: column.to_i}
+		end while !board.check_valid?(ship, at: coordinate, facing: direction)
 			
-		return [{x: row.to_i, y: column.to_i},direction.to_s]
+		return coordinate, direction
 	end
 
 	def get_target

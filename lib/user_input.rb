@@ -3,7 +3,7 @@ class UserInput
 	GRID_RANGE = (0..9)
 
 	def initialize
-			@directions = ["h","v"]
+			@valid_directions = [:h,:v]
 			@numbers = %w[1 2 3 4 5 6 7 8 9 10]
 			@letters = %w[A B C D E F G H I J]
 			@messages = {
@@ -14,7 +14,7 @@ class UserInput
 			}
 	end
 
-	attr_reader :directions, :numbers, :messages, :letters
+	attr_reader :valid_directions, :numbers, :messages, :letters
 
 	def message(action)
 		puts messages[action]
@@ -31,7 +31,7 @@ class UserInput
 		puts "Place your #{ship.name} (#{ship.length})..."
 		x, y = get_coordinate
 		direction = get_direction
-		return x, y, direction
+		return {x: x, y: y}, direction
 	end
 
 	def get_input_for_attack
@@ -42,7 +42,7 @@ class UserInput
 
 	def get_direction
 		puts "Please enter a direction (h/v)"
-		direction = gets.chomp
+		direction = gets.chomp.downcase.to_sym
 		check_direction(direction)
 	end
 
@@ -73,7 +73,7 @@ class UserInput
 	end
 
 	def check_direction(direction)
-		while !directions.include?(direction.downcase)
+		unless valid_directions.include?(direction)
 			puts "That direction is not valid, please try again"
 			direction = gets.chomp
 		end

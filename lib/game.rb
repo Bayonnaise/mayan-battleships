@@ -84,8 +84,6 @@ class Game
 		puts "Let's play Battleships!"
 	end
 
-
-
 	###PLaying the game####
 
 	def play_battleships
