@@ -5,6 +5,7 @@ describe Game do
 	let (:game) 	{ Game.new							}	
 	before(:each) 	{ allow(STDOUT).to receive(:puts) 	}
 	before(:each)   { allow(game.interface).to receive(:gets).and_return("Thomas", "Charlotte")}
+	before(:each) 	{ allow(STDOUT).to receive(:puts) 	}
 	
 	it 'creates two players' do
 		game.create_players

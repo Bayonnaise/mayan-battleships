@@ -2,6 +2,7 @@ require 'ship'
 
 describe Ship do
 
+	before(:each) 	{ allow(STDOUT).to receive(:puts) 	}
 	let(:ship) { Ship.new }
 
 	context 'when launched on maiden voyage' do

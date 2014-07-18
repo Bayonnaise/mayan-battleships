@@ -2,6 +2,7 @@ require 'terminal_board'
 
 describe TerminalBoard do
 	
+	before(:each) 	{ allow(STDOUT).to receive(:puts) 	}
 	let(:player) {Player.new}
 	before(:each) {player.board= Board.new}
 	let(:terminal_board) {TerminalBoard.new(player.board)}

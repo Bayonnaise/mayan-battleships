@@ -46,18 +46,5 @@ describe Square do
 		2.times { square.hit! }
 	end
 
-	xit 'reports if it has hit water' do
-		expect(STDOUT).to receive(:puts).with("Target missed. Bad luck!")
-		square.hit!
-	end
-
-	xit 'reports if it has hit ship' do
-		ship = double :ship, add_hit: nil
-		square.add_marker_for(ship)
-
-
-		expect(STDOUT).to receive(:puts).with("BOOM! Target down")
-		square.hit!
-	end
 
 end

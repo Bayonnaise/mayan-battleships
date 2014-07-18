@@ -78,24 +78,15 @@ class Game
 	### Placing the ships ready for play ###
 
 	def set_up_game
-		place_ships(players[0])
-		place_ships(players[1])
+			players.each do |player|
+			players.place_ships
+		end
 		puts "Let's play Battleships!"
 	end
 
-	def place_ships(player)
-		puts "Please place your ships, #{player.name}:"
-		player.ships.each do |ship| 
-			interface.print(player.own_terminal_board.read)
-			begin
-				row, column, direction = interface.get_input_to_place(ship)
-				coordinate = {x: row.to_i, y: column.to_i}
-			end while !player.board.check_valid?(ship, at: coordinate, facing: direction.to_sym)
-			
-			coordinate = {x: row.to_i, y: column.to_i}
-			player.board.place(ship, at: coordinate, facing: direction.to_sym)
-		end
-	end
+
+
+	###PLaying the game####
 
 	def play_battleships
 		turn = 0

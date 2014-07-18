@@ -3,7 +3,7 @@ require 'board'
 describe Board do
 
 	let (:board) { Board.new}
-
+	before(:each) 	{ allow(STDOUT).to receive(:puts) 	}
 	it 'has an array of squares' do
 		expect(board.grid).not_to be_empty
 	end
