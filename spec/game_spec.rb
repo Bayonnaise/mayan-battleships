@@ -5,7 +5,6 @@ describe Game do
 	let (:game) 	{ Game.new							}	
 	before(:each) 	{ allow(STDOUT).to receive(:puts) 	}
 	before(:each)   { allow(game.interface).to receive(:gets).and_return("Thomas", "Charlotte")}
-	before(:each) 	{ allow(STDOUT).to receive(:puts) 	}
 	
 	it 'creates two players' do
 		game.create_players
@@ -23,10 +22,17 @@ describe Game do
 		end
 	end
 
+	it 'creates a board for each player' do
+		game.create_game_elements
+		game.players.each do |player|
+			expect(player.board).to be_instance_of(Board)
+		end
+
+	end
+
 	context 'when creating a fleet' do
-		before(:each) {game.create_players		}
-		before(:each) {game.create_ships		}
-		let(:player)  {game.players[0]			}
+		before(:each) { game.create_game_elements		}
+		let(:player)  { game.players[0]					}
 
 
 
@@ -69,18 +75,81 @@ describe Game do
 			expect(not_ships).to eq []
 		end
 
+
 	end
 
 	context 'when in set-up phase' do
 
 		it 'asks each player in turn to place their ships' do
 			# Do we need to test this?
+
 		end
 
 	end
 
+
+
+	# context 'when firing at ships' do
+
+	# 	it 'allows a player to shoot at the other player' do
+	# 		game.create_game_elements
+	# 		player1, player2 = game.players[0], game.players[1]
+	# 		game.take_a_shot(player1, target: [0,0])
+	# 		expect(player2.board.grid[0][0]).to receive(:hit!)
+	# 	end
+
+	# end
+
 context 'when playing the game' do
+
+		it 'can identify the opposite player' do
+			game.create_players
+			puts game.players
+			expect(game.opponent_of(game.players[0])).to eq game.players[1]
+		end
+
+		it 'can identify the other opposite player' do
+			game.create_players
+			expect(game.opponent_of(game.players[1])).to eq game.players[0]
+		end
+
+
+		it 'allows a player to take a turn to shoot opponent' do
+			game.create_players
+			game.create_board
+
+			allow(game.interface).to receive(:get_input_for_attack).and_return([3,4])
+			game.take_a_turn(game.players[0])
+			expect(game.players[1].board.grid[3][4]).to have_been_hit
+		end
+
+		it 'keeps taking turns until a player has lost' do
+			game.create_players
+			# game.create_players
+			allow(game).to receive(:take_a_turn)
+			allow(game.players[0]).to receive(:has_lost?).and_return(false,false,true)
+			allow(game.players[1]).to receive(:has_lost?).and_return(false,false,false)
+			game.take_turns
+			expect(game.take_turns).to eq game.players[0]	
+		end
+
+				it 'keeps taking turns until a player has lost' do
+			game.create_players
+			# game.create_players
+			allow(game).to receive(:take_a_turn)
+			allow(game.players[0]).to receive(:has_lost?).and_return(false,false,false,false,false)
+			allow(game.players[1]).to receive(:has_lost?).and_return(false,false,false,false,true)
+			game.take_turns
+			expect(game.take_turns).to eq game.players[1]	
+		end
 
 
 	end
+
+	# it 'when running a whole game' do
+	# 	allow(STDOUT).to receive(:gets).and_return("Charlotte", "Dave", "A1", "h", "B5", "v", "A1", "h", "B5", "v" )
+	# 	game.create_game_elements
+	# 	game.set_up_game
+	# 	expect(game.player[1].board.grid[0][0]).to be_instance_of(Ship)
+	# end
 end

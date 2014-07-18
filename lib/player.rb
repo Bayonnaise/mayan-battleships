@@ -15,6 +15,7 @@ class Player
 			ships.all? {|ship| ship.sunk?}
 	end
 
+# When placing ships
 	def place_all_ships
 		puts "Please place your ships, #{name}:"
 		ships.each do |ship| 
@@ -26,23 +27,16 @@ class Player
 
 
 	def get_desired_location_of ship
-		begin
+		loop do
 			coordinate, direction = interface.get_input_to_place(ship)
-			# coordinate = {x: row.to_i, y: column.to_i}
-		end while !board.check_valid?(ship, at: coordinate, facing: direction)
-			
-		return coordinate, direction
+			return coordinate, direction if board.check_valid?(ship, at: coordinate, facing: direction)
+		end
 	end
 
-	def get_target
-		puts "It's your turn, #{name}"
-		row, column = interface.get_input_for_attack
-		return row, column
+	def shoot_at (player, x, y)
+		player.board.grid[x][y].hit!
 	end
 
-	def fire_shot(target, row, column)
-		target.board.grid[row.to_i][column.to_i].hit!
-	end
 
 end
 

@@ -29,7 +29,7 @@ class Game
 	def play_game
 		create_game_elements
 		set_up_game
-		play_battleships
+		# play_battleships
 	end
 
 # Phase 1 - create game elements
@@ -86,15 +86,16 @@ class Game
 
 	###PLaying the game####
 
+
 	def play_battleships
 		turn = 0
 		until players[0].has_lost? || players[1].has_lost?
 			puts "Turn #{turn}"
-			interface.print(players[1].terminal_board.read)
+			# interface.print(players[1].terminal_board.read)
 			row, column = players[0].get_target
 			target = players[1]
 			players[0].fire_shot(target, row, column)
-			interface.print(players[0].terminal_board.read)
+			# interface.print(players[0].terminal_board.read)
 			row, column = players[1].get_target
 			target = players[0]
 			players[1].fire_shot(target, row, column)
@@ -103,8 +104,38 @@ class Game
 		puts "Game over"
 	end
 
+# when shooting at ships
+
+	def get_target
+		puts "It's your turn, #{name}"
+		row, column = interface.get_input_for_attack
+		return row, column
+	end
+
+	def fire_shot(target, row, column)
+		target.board.grid[row.to_i][column.to_i].hit!
+	end
 
 
+	def opponent_of player
+		players.select {|element| element !=player}[0]
+	end
+
+
+	def take_a_turn player
+		x, y = interface.get_input_for_attack
+		player.shoot_at(opponent_of(player),x,y)
+		opponent_of(player).has_lost?
+	end
+
+	def take_turns
+		loop do
+			players.each do |player|
+				return player if player.has_lost? 
+				take_a_turn player
+			end
+		end
+	end
 
 end
 

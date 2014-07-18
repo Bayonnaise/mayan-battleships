@@ -31,7 +31,7 @@ class UserInput
 		puts "Place your #{ship.name} (#{ship.length})..."
 		x, y = get_coordinate
 		direction = get_direction
-		return {x: x, y: y}, direction
+		return 
 	end
 
 	def get_input_for_attack
