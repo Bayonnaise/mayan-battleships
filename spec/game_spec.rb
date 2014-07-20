@@ -115,9 +115,7 @@ context 'when playing the game' do
 
 
 		it 'allows a player to take a turn to shoot opponent' do
-			game.create_players
-			game.create_board
-
+			game.create_game_elements
 			allow(game.interface).to receive(:get_input_for_attack).and_return([3,4])
 			game.take_a_turn(game.players[0])
 			expect(game.players[1].board.grid[3][4]).to have_been_hit
@@ -125,7 +123,6 @@ context 'when playing the game' do
 
 		it 'keeps taking turns until a player has lost' do
 			game.create_players
-			# game.create_players
 			allow(game).to receive(:take_a_turn)
 			allow(game.players[0]).to receive(:has_lost?).and_return(false,false,true)
 			allow(game.players[1]).to receive(:has_lost?).and_return(false,false,false)
@@ -133,9 +130,8 @@ context 'when playing the game' do
 			expect(game.take_turns).to eq game.players[0]	
 		end
 
-				it 'keeps taking turns until a player has lost' do
+		it 'keeps taking turns until a player has lost' do
 			game.create_players
-			# game.create_players
 			allow(game).to receive(:take_a_turn)
 			allow(game.players[0]).to receive(:has_lost?).and_return(false,false,false,false,false)
 			allow(game.players[1]).to receive(:has_lost?).and_return(false,false,false,false,true)
@@ -143,13 +139,13 @@ context 'when playing the game' do
 			expect(game.take_turns).to eq game.players[1]	
 		end
 
+		it 'announces the winner and ends the game' do
+			game.create_game_elements
+			expect(game.interface).to receive(:announce_final).with(winner: game.players[1],loser: game.players[0])
+			game.end_game game.players[0]
+		end
 
 	end
 
-	# it 'when running a whole game' do
-	# 	allow(STDOUT).to receive(:gets).and_return("Charlotte", "Dave", "A1", "h", "B5", "v", "A1", "h", "B5", "v" )
-	# 	game.create_game_elements
-	# 	game.set_up_game
-	# 	expect(game.player[1].board.grid[0][0]).to be_instance_of(Ship)
-	# end
+
 end

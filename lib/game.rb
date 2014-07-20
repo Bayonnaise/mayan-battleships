@@ -11,25 +11,32 @@ require_relative 'own_terminal_board'
 NUMBER_OF_PLAYERS = 2
 NUMBER_OF_RAFTS = 1
 NUMBER_OF_CANOES = 1
-NUMBER_OF_SHORTBOATS = 0
-NUMBER_OF_LONGBOATS = 0
+NUMBER_OF_SHORTBOATS = 1
+NUMBER_OF_LONGBOATS = 1
 
 class Game
 	
 	def initialize
 		@players = []
 		@interface = UserInput.new
-		# play_game
 	end
 
 	attr_reader :players, :interface
 
 # Phase	 0
 
+	def start_game
+		interface.message(:welcome_message)
+		gets.chomp
+		play_game
+
+	end
+
 	def play_game
 		create_game_elements
 		set_up_game
-		# play_battleships
+		loser = take_turns
+		end_game(loser)
 	end
 
 # Phase 1 - create game elements
@@ -75,47 +82,16 @@ class Game
 	end
 
 
-	### Placing the ships ready for play ###
+### Phase 2: Placing the ships ready for play ###
 
 	def set_up_game
 			players.each do |player|
 			player.place_all_ships
 		end
-		puts "Let's play Battleships!"
+		interface.message(:start_playing)
 	end
 
-	###PLaying the game####
-
-
-	def play_battleships
-		turn = 0
-		until players[0].has_lost? || players[1].has_lost?
-			puts "Turn #{turn}"
-			# interface.print(players[1].terminal_board.read)
-			row, column = players[0].get_target
-			target = players[1]
-			players[0].fire_shot(target, row, column)
-			# interface.print(players[0].terminal_board.read)
-			row, column = players[1].get_target
-			target = players[0]
-			players[1].fire_shot(target, row, column)
-			turn += 1
-		end
-		puts "Game over"
-	end
-
-# when shooting at ships
-
-	def get_target
-		puts "It's your turn, #{name}"
-		row, column = interface.get_input_for_attack
-		return row, column
-	end
-
-	def fire_shot(target, row, column)
-		target.board.grid[row.to_i][column.to_i].hit!
-	end
-
+ #Phase 3: PLaying the game####
 
 	def opponent_of player
 		players.select {|element| element !=player}[0]
@@ -123,9 +99,10 @@ class Game
 
 
 	def take_a_turn player
-		x, y = interface.get_input_for_attack
+		x, y = interface.get_input_for_attack(player, opponent_of(player), opponent_of(player).terminal_board)
 		player.shoot_at(opponent_of(player),x,y)
 		opponent_of(player).has_lost?
+		interface.print(opponent_of(player).terminal_board.read)
 	end
 
 	def take_turns
@@ -137,5 +114,37 @@ class Game
 		end
 	end
 
+	def end_game loser
+		interface.announce_final(winner: opponent_of(loser), loser: loser)
+	end
+
 end
 
+	# def play_battleships
+	# 	turn = 0
+	# 	until players[0].has_lost? || players[1].has_lost?
+	# 		puts "Turn #{turn}"
+	# 		# interface.print(players[1].terminal_board.read)
+	# 		row, column = players[0].get_target
+	# 		target = players[1]
+	# 		players[0].fire_shot(target, row, column)
+	# 		# interface.print(players[0].terminal_board.read)
+	# 		row, column = players[1].get_target
+	# 		target = players[0]
+	# 		players[1].fire_shot(target, row, column)
+	# 		turn += 1
+	# 	end
+	# 	puts "Game over"
+	# end
+
+# when shooting at ships
+
+	# def get_target
+	# 	puts "It's your turn, #{name}"
+	# 	row, column = interface.get_input_for_attack
+	# 	return row, column
+	# end
+
+	# def fire_shot(target, row, column)
+	# 	target.board.grid[row.to_i][column.to_i].hit!
+	# end

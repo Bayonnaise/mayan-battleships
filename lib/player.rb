@@ -16,13 +16,15 @@ class Player
 	end
 
 # When placing ships
+
 	def place_all_ships
-		puts "Please place your ships, #{name}:"
+		puts "#{name} - please place your ships:"
 		ships.each do |ship| 
+			interface.print(own_terminal_board.read)
 			coordinate, direction = get_desired_location_of ship
-			# interface.print(own_terminal_board.read)
 			board.place(ship, at: coordinate, facing: direction)
 		end
+		interface.all_ships_placed(own_terminal_board.read)
 	end
 
 
@@ -32,6 +34,8 @@ class Player
 			return coordinate, direction if board.check_valid?(ship, at: coordinate, facing: direction)
 		end
 	end
+
+# When shooting at ships
 
 	def shoot_at (player, x, y)
 		player.board.grid[x][y].hit!

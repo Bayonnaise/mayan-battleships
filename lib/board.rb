@@ -20,12 +20,13 @@ class Board
 	end
 
 	def check_valid?(ship, at: coordinate, facing: direction)
+		x_coord, y_coord = at[:x], at[:y]
 		ship.length.times do
-			if at[:x] > 9 || at[:y] > 9 || !@grid[at[:x]][at[:y]].contents.is_a?(Water)
+			if x_coord > 9 || y_coord > 9 || !@grid[x_coord][y_coord].contents.is_a?(Water)
 				interface.message(:duplicate_ship)
 				return false
 			else
-				facing == :h ? at[:y] += 1 : at[:x] += 1
+				facing == :h ? y_coord += 1 : x_coord += 1
 			end
 		end
 		true

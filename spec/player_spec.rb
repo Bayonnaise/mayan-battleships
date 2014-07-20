@@ -39,9 +39,11 @@ describe Player do
 			expect(player.get_desired_location_of ship).to eq([{x: 5, y: 6}, :h])
 		end
 
-		it 'places all ships of all players' do
+		it 'places all ships' do
 			allow(player).to receive(:get_desired_location_of).and_return([{x: 5, y: 6}, :h])
-			
+			allow(player.interface).to receive(:print)
+			allow(player.interface).to receive(:all_ships_placed)
+			player.own_terminal_board = double :board, read: nil
 			player.ships.each do |ship|
 				expect(player.board).to receive(:place).with(ship, at: {x: 5, y:6}, facing: :h)
 			end
