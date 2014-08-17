@@ -1,4 +1,4 @@
-Battlehips
+Battleships
 =================
 **Makers Academy - week 3**
 
