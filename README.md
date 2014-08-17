@@ -12,10 +12,10 @@ As our first team project, we were assigned into groups of four and tasked with 
 
 Tools used
 --
-Ruby
-Rspec
-OOP
-TDD
+- Ruby
+- Rspec
+- OOP
+- TDD
 
 How to play
 --
